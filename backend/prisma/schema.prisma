@@ -1,0 +1,200 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  nombre        String
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  rol           UserRole  @default(BUYER)
+  estado        UserEstado @default(ACTIVO)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  profile      Profile?
+  products      Product[]
+  ordersAsBuyer Order[]   @relation("BuyerOrders")
+  ordersAsFarmer Order[]  @relation("FarmerOrders")
+  sentMessages  Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  notifications Notification[]
+  auditLogs     AuditLog[]
+
+  @@map("users")
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  userId    String   @unique @map("user_id")
+  telefono  String?
+  ubicacion String?
+  fotoUrl   String?  @map("foto_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  farmerId    String   @map("farmer_id")
+  nombre      String
+  descripcion String?
+  categoria   String
+  precio      Decimal  @db.Decimal(10, 2)
+  cantidad    Int      @default(0)
+  imagenUrl   String?  @map("imagen_url")
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  farmer      User     @relation(fields: [farmerId], references: [id], onDelete: Cascade)
+  orderItems  OrderItem[]
+  notifications Notification[]
+
+  @@map("products")
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  buyerId         String      @map("buyer_id")
+  farmerId        String      @map("farmer_id")
+  estado          OrderEstado @default(PENDIENTE)
+  total           Decimal     @db.Decimal(10, 2)
+  direccionEntrega String?    @map("direccion_entrega")
+  contacto       String?
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  buyer           User        @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
+  farmer          User        @relation("FarmerOrders", fields: [farmerId], references: [id], onDelete: Cascade)
+  items           OrderItem[]
+  payments        Payment[]
+  messages        Message[]
+  notifications   Notification[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id            String   @id @default(uuid())
+  orderId       String   @map("order_id")
+  productId     String   @map("product_id")
+  cantidad      Int
+  precioUnitario Decimal  @db.Decimal(10, 2) @map("precio_unitario")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+}
+
+model Payment {
+  id        String        @id @default(uuid())
+  orderId  String        @map("order_id")
+  metodo   PaymentMetodo
+  estado   PaymentEstado @default(PENDIENTE)
+  referencia String?
+  monto    Decimal       @db.Decimal(10, 2)
+  fecha    DateTime      @default(now())
+  createdAt DateTime     @default(now()) @map("created_at")
+
+  order     Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  emisorId  String   @map("emisor_id")
+  receptorId String  @map("receptor_id")
+  orderId   String?  @map("order_id")
+  contenido String
+  fecha     DateTime @default(now())
+  leido     Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  emisor    User     @relation("SentMessages", fields: [emisorId], references: [id], onDelete: Cascade)
+  receptor  User     @relation("ReceivedMessages", fields: [receptorId], references: [id], onDelete: Cascade)
+  order     Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+
+  @@map("messages")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId   String   @map("user_id")
+  tipo      String
+  mensaje   String
+  fecha     DateTime  @default(now())
+  leida     Boolean   @default(false)
+  orderId   String?   @map("order_id")
+  productId String?   @map("product_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order     Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?  @map("user_id")
+  accion    String
+  entidad   String
+  entidadId String?  @map("entidad_id")
+  fecha     DateTime @default(now())
+  detalle   String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
+
+enum UserRole {
+  FARMER
+  BUYER
+  ADMIN
+}
+
+enum UserEstado {
+  ACTIVO
+  INACTIVO
+  SUSPENDIDO
+}
+
+enum OrderEstado {
+  PENDIENTE
+  NEGOCIACION
+  ACEPTADO
+  RECHAZADO
+  CONFIRMADO
+}
+
+enum PaymentMetodo {
+  PSE
+  EFECTIVO
+  OTRO
+}
+
+enum PaymentEstado {
+  PENDIENTE
+  APROBADO
+  FALLIDO
+}
+

@@ -1,0 +1,35 @@
+.map-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.map-page h1 {
+  margin-bottom: 2rem;
+  color: #2d5016;
+}
+
+.map-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-placeholder {
+  text-align: center;
+  color: #666;
+}
+
+.map-placeholder p:first-child {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.map-note {
+  font-size: 0.9rem;
+  color: #999;
+}
+
