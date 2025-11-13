@@ -24,40 +24,54 @@ export const LoginPage = () => {
 
   return (
     <div className="auth-container">
-      <div className="auth-card">
-        <h1>🌱 AgroPlanet</h1>
-        <h2>Iniciar Sesión</h2>
-        <form onSubmit={handleSubmit}>
-          {error && <div className="error-message">{error}</div>}
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Contraseña</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <button type="submit" disabled={isLoading} className="submit-btn">
-            {isLoading ? 'Cargando...' : 'Iniciar Sesión'}
-          </button>
-        </form>
-        <p className="auth-link">
-          ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
-        </p>
+      <div className="auth-header">
+        <h1>Bienvenidos</h1>
+        <div className="logo-letter">A</div>
+        <div className="logo-text">AgroPlanet</div>
+        <div className="auth-logo"></div>
+      </div>
+      <div className="auth-form-section">
+        <div className="auth-card">
+          <form onSubmit={handleSubmit}>
+            {error && <div className="error-message">{error}</div>}
+            <div className="form-group">
+              <input
+                type="email"
+                id="email"
+                placeholder="Correo"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                id="password"
+                placeholder="contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+            <div className="auth-buttons">
+              <button type="submit" disabled={isLoading} className="submit-btn">
+                {isLoading ? 'Cargando...' : 'iniciar sesion'}
+              </button>
+              <Link to="/register" className="auth-action-btn" style={{ textDecoration: 'none', textAlign: 'center' }}>
+                Crear cuenta
+              </Link>
+              <button type="button" className="auth-action-btn" onClick={() => navigate('/')}>
+                Ingresar sin usuario
+              </button>
+            </div>
+            <p className="auth-link">
+              he olvidado mi contraseña
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );

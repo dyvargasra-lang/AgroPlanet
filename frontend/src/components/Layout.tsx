@@ -15,31 +15,25 @@ export const Layout = () => {
     return null;
   }
 
+  const getRoleLabel = () => {
+    if (user.rol === 'FARMER') return 'Agricultor';
+    if (user.rol === 'BUYER') return 'Comprador';
+    return 'Admin';
+  };
+
   return (
     <div className="layout">
       <header className="header">
         <div className="header-content">
-          <Link to="/" className="logo">
-            🌱 AgroPlanet
+          <div className="menu-icon">⋮</div>
+          <div className="header-title">
+            <div className="header-role">{getRoleLabel()}</div>
+            <div className="header-name">{user.nombre}</div>
+          </div>
+          <Link to="/chat" className="chat-icon">
+            <div className="chat-label">Chat</div>
+            <div className="chat-bubble">💬</div>
           </Link>
-          <nav className="nav">
-            <Link to="/products">Productos</Link>
-            {user.rol === 'FARMER' || user.rol === 'ADMIN' ? (
-              <>
-                <Link to="/farmer/products">Mis Productos</Link>
-                <Link to="/farmer/orders">Mis Pedidos</Link>
-              </>
-            ) : (
-              <Link to="/orders">Mis Pedidos</Link>
-            )}
-            <Link to="/chat">Chat</Link>
-            <Link to="/map">Mapa</Link>
-            {user.rol === 'ADMIN' && <Link to="/admin">Admin</Link>}
-            <span className="user-name">{user.nombre}</span>
-            <button onClick={handleLogout} className="logout-btn">
-              Salir
-            </button>
-          </nav>
         </div>
       </header>
       <main className="main-content">

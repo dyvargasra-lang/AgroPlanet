@@ -1,19 +1,17 @@
-version: '3.8'
-
 services:
-  postgres:
-    image: postgres:14-alpine
-    container_name: agroplanet-db
+  db:
+    image: postgres:15
+    container_name: agroplanet_db
     environment:
-      POSTGRES_USER: agroplanet
-      POSTGRES_PASSWORD: agroplanet123
-      POSTGRES_DB: agroplanet
+      POSTGRES_USER: agro_user
+      POSTGRES_PASSWORD: agro_pass
+      POSTGRES_DB: agroplanet_db
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U agroplanet"]
+      test: ["CMD-SHELL", "pg_isready -U agro_user"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,13 +23,15 @@ services:
     container_name: agroplanet-backend
     environment:
       NODE_ENV: development
-      DATABASE_URL: postgresql://agroplanet:agroplanet123@postgres:5432/agroplanet
-      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      DATABASE_URL: postgresql://agro_user:agro_pass@db:5432/agroplanet_db
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production-min-32-chars
+      JWT_EXPIRES_IN: 7d
+      CORS_ORIGIN: http://localhost:3000
       PORT: 3001
     ports:
       - "3001:3001"
     depends_on:
-      postgres:
+      db:
         condition: service_healthy
     volumes:
       - ./backend:/app

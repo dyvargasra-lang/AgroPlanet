@@ -26,64 +26,73 @@ export const RegisterPage = () => {
 
   return (
     <div className="auth-container">
-      <div className="auth-card">
-        <h1>🌱 AgroPlanet</h1>
-        <h2>Registro</h2>
-        <form onSubmit={handleSubmit}>
-          {error && <div className="error-message">{error}</div>}
-          <div className="form-group">
-            <label htmlFor="nombre">Nombre</label>
-            <input
-              type="text"
-              id="nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={isLoading}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Contraseña</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={8}
-              disabled={isLoading}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="rol">Rol</label>
-            <select
-              id="rol"
-              value={rol}
-              onChange={(e) => setRol(e.target.value as 'FARMER' | 'BUYER')}
-              disabled={isLoading}
-            >
-              <option value="BUYER">Comprador</option>
-              <option value="FARMER">Agricultor</option>
-            </select>
-          </div>
-          <button type="submit" disabled={isLoading} className="submit-btn">
-            {isLoading ? 'Cargando...' : 'Registrarse'}
-          </button>
-        </form>
-        <p className="auth-link">
-          ¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link>
-        </p>
+      <div className="auth-header">
+        <h1>Bienvenidos</h1>
+        <div className="logo-letter">A</div>
+        <div className="logo-text">AgroPlanet</div>
+        <div className="auth-logo"></div>
+      </div>
+      <div className="auth-form-section">
+        <div className="auth-card">
+          <h2>Registro</h2>
+          <form onSubmit={handleSubmit}>
+            {error && <div className="error-message">{error}</div>}
+            <div className="form-group">
+              <input
+                type="text"
+                id="nombre"
+                placeholder="Nombre"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="email"
+                id="email"
+                placeholder="Correo"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                id="password"
+                placeholder="contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={8}
+                disabled={isLoading}
+              />
+            </div>
+            <div className="form-group">
+              <select
+                id="rol"
+                value={rol}
+                onChange={(e) => setRol(e.target.value as 'FARMER' | 'BUYER')}
+                disabled={isLoading}
+                style={{ padding: '0.75rem', border: '2px solid black', borderRadius: '12px', fontSize: '1rem' }}
+              >
+                <option value="BUYER">Comprador</option>
+                <option value="FARMER">Agricultor</option>
+              </select>
+            </div>
+            <div className="auth-buttons">
+              <button type="submit" disabled={isLoading} className="submit-btn">
+                {isLoading ? 'Cargando...' : 'Crear cuenta'}
+              </button>
+              <Link to="/login" className="auth-action-btn" style={{ textDecoration: 'none', textAlign: 'center' }}>
+                Iniciar sesion
+              </Link>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ export const FarmerProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
     nombre: '',
     descripcion: '',
@@ -70,13 +71,20 @@ export const FarmerProductsPage = () => {
     }
   };
 
+  const filteredProducts = products.filter(product =>
+    product.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="farmer-products-page">
-      <div className="page-header">
-        <h1>Mis Productos</h1>
-        <button onClick={() => setShowForm(!showForm)} className="add-btn">
-          {showForm ? 'Cancelar' : '+ Nuevo Producto'}
-        </button>
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Buscar producto"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <span className="search-icon">🔍</span>
       </div>
 
       {showForm && (
@@ -142,37 +150,43 @@ export const FarmerProductsPage = () => {
           <button type="submit" className="submit-btn">
             Crear Producto
           </button>
+          <button type="button" onClick={() => setShowForm(false)} className="edit-btn" style={{ marginTop: '1rem' }}>
+            Cancelar
+          </button>
         </form>
       )}
 
       {loading ? (
         <div className="loading">Cargando productos...</div>
-      ) : products.length === 0 ? (
+      ) : filteredProducts.length === 0 ? (
         <div className="empty">No tienes productos</div>
       ) : (
-        <div className="products-grid">
-          {products.map((product) => (
-            <div key={product.id} className="product-card">
-              {product.imagenUrl && (
-                <img src={product.imagenUrl} alt={product.nombre} className="product-image" />
-              )}
-              <div className="product-info">
-                <h3>{product.nombre}</h3>
-                <p className="product-category">{product.categoria}</p>
-                <p className="product-price">${product.precio}</p>
-                <p className="product-stock">Stock: {product.cantidad}</p>
-                <div className="product-actions">
-                  <button
-                    onClick={() => handleDelete(product.id)}
-                    className="delete-btn"
-                  >
-                    Eliminar
-                  </button>
+        <>
+          <div className="products-grid">
+            {filteredProducts.map((product) => (
+              <div key={product.id} className="product-card">
+                {product.imagenUrl ? (
+                  <img src={product.imagenUrl} alt={product.nombre} className="product-image" />
+                ) : (
+                  <div className="product-image" style={{ background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem' }}>
+                    🍎
+                  </div>
+                )}
+                <div className="product-info">
+                  <h3>{product.nombre}</h3>
+                  <p className="product-details">Cantidad disponible: {product.cantidad} unidades</p>
+                  <p className="product-price">precio unidad: {product.precio} pesos</p>
+                  <button className="edit-btn">Editar</button>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+          <div className="add-product-footer">
+            <button onClick={() => setShowForm(!showForm)} className="add-product-btn">
+              Agregar producto
+            </button>
+          </div>
+        </>
       )}
     </div>
   );
