@@ -1,5 +1,7 @@
 # AgroPlanet
 
+Plataforma digital para la comercialización directa y sostenible de productos agrícolas
+
 Monorepo para la plataforma AgroPlanet - Sistema de gestión agrícola con arquitectura cliente-servidor.
 
 ## Stack Tecnológico
@@ -97,4 +99,3 @@ cd frontend && npm test
 ## Licencia
 
 MIT
-
