@@ -43,21 +43,31 @@ AgroPlanet es una plataforma web que facilita la comercialización directa de pr
 
 ```
 agroplanet/
-├── backend/              # API REST con Express
-│   ├── src/
-│   │   ├── modules/      # Módulos de la aplicación
-│   │   ├── middlewares/  # Middlewares (auth, rate limit, audit)
-│   │   ├── config/       # Configuración (DB, env)
-│   │   └── utils/        # Utilidades (JWT, logger, errors)
-│   ├── prisma/           # Schema y migraciones de Prisma
-│   └── tests/            # Tests del backend
-├── frontend/             # Aplicación React
-│   ├── src/
-│   │   ├── pages/        # Páginas de la aplicación
-│   │   ├── components/   # Componentes reutilizables
-│   │   ├── services/     # Servicios API
-│   │   └── store/        # Estado global (Zustand)
-│   └── public/           # Archivos estáticos
+├── docs/
+   ├── DIAGRAMAS_Y_REQUISITOS.md
+   ├── DISEÑO_FUNCIONAL.md
+   ├── GIT_SETUP.md
+   ├── INFRASTRUCTURE.md
+   ├──INSTRUCCIONES_BRANCH_PROTECTION.md
+   ├── PROTECCION_REPOSITORIO.md
+   ├── SCRUM-BACKLOGS.md
+   └──
+├── src/
+   ├── backend/              # API REST con Express
+   │   ├── src/
+   │   │   ├── modules/      # Módulos de la aplicación
+   │   │   ├── middlewares/  # Middlewares (auth, rate limit, audit)
+   │   │   ├── config/       # Configuración (DB, env)
+   │   │   └── utils/        # Utilidades (JWT, logger, errors)
+   │   ├── prisma/           # Schema y migraciones de Prisma
+   │   └── tests/            # Tests del backend
+   ├── frontend/             # Aplicación React
+   │   ├── src/
+   │   │   ├── pages/        # Páginas de la aplicación
+   │   │   ├── components/   # Componentes reutilizables
+   │   │   ├── services/     # Servicios API
+   │   │   └── store/        # Estado global (Zustand)
+   │   └── public/           # Archivos estáticos
 ├── infra/                # Scripts de despliegue
 └── docker-compose.yml    # Configuración de Docker Compose
 ```
@@ -78,7 +88,7 @@ Esta es la forma más sencilla de ejecutar la aplicación completa:
 
 2. **Clonar el repositorio** (si aplica):
    ```bash
-   git clone <url-del-repositorio>
+   git clone https://github.com/dyvargasra-lang/AgroPlanet  
    cd agroplanet
    ```
 
@@ -307,6 +317,13 @@ npm run lint             # Linter en todos los workspaces
 
 ### Error: Variables de entorno faltantes
 - Verifica que el archivo `.env` exista en `backend/` con todas las variables requeridas
+
+## Prototipo TRL5
+El prototipo funcional de AgroPlanet se encuentra implementado en este repositorio.  
+Incluye las funcionalidades principales: registro, login, gestión de productos, catálogo del comprador, pedidos, chat y simulación de pago.
+
+### Evidencias TRL5
+- Capturas de pantalla en `/assets/prototipo/`
 
 ## 📄 Licencia
 
